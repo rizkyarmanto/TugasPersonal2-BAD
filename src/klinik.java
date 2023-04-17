@@ -7,10 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class klinik extends JFrame implements ActionListener {
-
-    private JLabel labelNama, labelAlamat, labelNIK, labelTglLahir;
-    private JTextField fieldNama, fieldAlamat, fieldNIK, fieldTglLahir;
-    private JButton buttonSimpan, buttonTampilkan;
+    private JTextField txtNama, txtAlamat, txtNik, txtTanggalLahir;
+    private JButton btnSimpan, btnTampilkan, btnTambah, btnUpdate, btnHapus, btnSebelumnya, btnSesudahnya;
     private String[][] data = new String[100][4];
     private int count = 0;
 
@@ -18,94 +16,90 @@ public class klinik extends JFrame implements ActionListener {
     private Set<String> nikSet = new HashSet<>();
 
     public klinik() {
-        // Membuat frame
-        setTitle("Input Data");
-        setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setTitle("Data Pribadi");
+        setSize(400, 200);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // Membuat label
-        labelNama = new JLabel("Nama:");
-        labelAlamat = new JLabel("Alamat:");
-        labelNIK = new JLabel("NIK:");
-        labelTglLahir = new JLabel("Tanggal Lahir (YYYY-MMM-DD):");
+        JLabel lblNama = new JLabel("Nama:");
+        txtNama = new JTextField(20);
 
-        // Membuat field input
-        fieldNama = new JTextField(20);
-        fieldAlamat = new JTextField(20);
-        fieldNIK = new JTextField(20);
-        fieldTglLahir = new JTextField(20);
+        JLabel lblAlamat = new JLabel("Alamat:");
+        txtAlamat = new JTextField(20);
 
-        // Membuat tombol simpan
-        buttonSimpan = new JButton("Simpan");
-        buttonSimpan.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Mengecek apakah NIK sudah ada sebelumnya
-                String nik = fieldNIK.getText();
-                if (nikSet.contains(nik)) {
-                    JOptionPane.showMessageDialog(null, "NIK sudah terdaftar!");
-                    return;
-                }
+        JLabel lblNik = new JLabel("NIK:");
+        txtNik = new JTextField(20);
 
-                // Menambahkan NIK ke Set
-                nikSet.add(nik);
+        JLabel lblTanggalLahir = new JLabel("Tanggal Lahir:");
+        txtTanggalLahir = new JTextField(20);
 
-                // Mendapatkan tanggal lahir dari input
-                String tglLahirString = fieldTglLahir.getText();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd");
-                Date tglLahir = null;
-                try {
-                    tglLahir = dateFormat.parse(tglLahirString);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Format tanggal salah!");
-                    return;
-                }
-            }
-        });
+        btnSimpan = new JButton("Simpan");
+        btnSimpan.addActionListener(this);
 
-        buttonTampilkan = new JButton("Tampilkan Data");
-        buttonTampilkan.addActionListener(this);
+        btnTampilkan = new JButton("Tampilkan Data");
+        btnTampilkan.addActionListener(this);
 
-        // Membuat panel
-        JPanel panel = new JPanel(new GridLayout(4, 2));
-        panel.add(labelNama);
-        panel.add(fieldNama);
-        panel.add(labelAlamat);
-        panel.add(fieldAlamat);
-        panel.add(labelNIK);
-        panel.add(fieldNIK);
-        panel.add(labelTglLahir);
-        panel.add(fieldTglLahir);
-        panel.add(new JLabel()); // Cell kosong
+        JPanel panelInput = new JPanel(new GridLayout(4,2));
+        panelInput.add(lblNama);
+        panelInput.add(txtNama);
+        panelInput.add(lblAlamat);
+        panelInput.add(txtAlamat);
+        panelInput.add(lblNik);
+        panelInput.add(txtNik);
+        panelInput.add(lblTanggalLahir);
+        panelInput.add(txtTanggalLahir);
 
-        JPanel panelButton = new JPanel(new FlowLayout());
-        panelButton.add(buttonSimpan);
-        panelButton.add(buttonTampilkan);
+        JPanel panelButton1 = new JPanel(new FlowLayout());
+        panelButton1.add(btnTambah);
+        panelButton1.add(btnUpdate);
+        panelButton1.add(btnHapus);
+
+        JPanel panelButton2 = new JPanel(new FlowLayout());
+        panelButton2.add(btnSebelumnya);
+        panelButton2.add(btnSesudahnya);
+
+        JPanel panelButton3 = new JPanel(new FlowLayout());
+        panelButton3.add(btnSimpan);
+        panelButton3.add(btnTampilkan);
 
         JPanel panelMain = new JPanel(new BorderLayout());
-        panelMain.add(panel, BorderLayout.CENTER);
-        panelMain.add(panelButton, BorderLayout.SOUTH);
+        panelMain.add(panelInput, BorderLayout.CENTER);
+        panelMain.add(panelButton3, BorderLayout.SOUTH);
 
         add(panelMain);
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new klinik();
-    }
-
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == buttonSimpan) {
-            data[count][0] = labelNama.getText();
-            data[count][1] = labelAlamat.getText();
-            data[count][2] = labelNIK.getText();
-            data[count][3] = labelTglLahir.getText();
+        // Mengecek apakah NIK sudah ada sebelumnya
+        String nik = txtNik.getText();
+        if (nikSet.contains(nik)) {
+            JOptionPane.showMessageDialog(null, "NIK sudah terdaftar!");
+            return;
+        }
+
+        // Menambahkan NIK ke Set
+        nikSet.add(nik);
+
+        // Mendapatkan tanggal lahir dari input
+        String tglLahirString = txtTanggalLahir.getText();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MMM-DD");
+        Date tglLahir = null;
+        try {
+            tglLahir = dateFormat.parse(tglLahirString);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Format tanggal salah!");
+            return;
+        }
+        if(e.getSource() == btnSimpan) {
+            data[count][0] = txtNama.getText();
+            data[count][1] = txtAlamat.getText();
+            data[count][2] = txtNik.getText();
+            data[count][3] = txtTanggalLahir.getText();
             count++;
             JOptionPane.showMessageDialog(this, "Data berhasil disimpan!");
         }
 
-        if (e.getSource() == buttonTampilkan) {
+        if(e.getSource() == btnTampilkan) {
             if (count == 0) {
                 JOptionPane.showMessageDialog(this, "Belum ada data yang disimpan!");
             } else {
@@ -126,4 +120,8 @@ public class klinik extends JFrame implements ActionListener {
             }
         }
     }
-};
+
+    public static void main(String[] args) {
+        new klinik();
+    }
+}
